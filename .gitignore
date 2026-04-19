@@ -36,6 +36,17 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Claude Code local settings
+.claude/
+
+# archivos locales / binarios
+*.exe
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
