@@ -278,23 +278,43 @@ GROUP BY pr.nombre, pr.apellido ORDER BY monto DESC
 ## Estado del proyecto
 
 ### Completado y funcionando
-- Next.js 16.2.2 + TypeScript + Tailwind
-- Supabase configurado (schema, RLS, Realtime, 15 productos de ejemplo)
-- proxy.ts con protección de rutas por rol (3 capas)
-- Tienda pública: productos, categorías, carrito, variantes
-- Auth cliente: registro, login, logout en navbar
+- Next.js 16.2.2 + TypeScript + Tailwind + Dark mode (ThemeToggle en las 3 navbars)
+- Supabase configurado (schema, RLS, Realtime) — **proyecto activo: rkeqsfmfzacazgzacoin**
+- 15 productos con 47 variantes detalladas (marca, presentación, capacidad, precio por variante)
+- proxy.ts con protección de rutas por rol (3 capas) — redirect a /empleados/login o /admin/login
+- Tienda pública (/tienda): productos, categorías, carrito, variantes con precio correcto, MP Checkout Pro
+- Auth cliente: registro, login, logout; link "Mis pedidos" en navbar cuando está logueado
+- Mis pedidos: datos reales de DB, paginado (20 por página, botón "Cargar más")
+- Perfil editable del cliente (/perfil)
 - Mercado Pago Checkout Pro (prueba funcionando con Buyer Test User)
 - Páginas resultado pago: exitoso/fallido/pendiente
-- Panel admin accesible: tu-email-admin@example.com (role=admin en tabla profiles)
-- Panel empleado: acceso protegido funcionando
+- Login separado por rol: /empleados/login y /admin/login
+- POS empleado (POSDashboard): búsqueda, categorías, variantes, promos, escáner USB, recibo, guard de turno
+- Caja empleado: abrir/cerrar turno, resumen por método de pago, historial de ventas del turno
+- Inventario empleado: filtros de vencimiento, escáner USB, filas expandibles con variantes
+- Comentarios/logs de empleados: entrada/salida/incidente, editar y eliminar
+- Admin dashboard: DateRangePicker, KPICards, SalesChart, ProductRanking, ExpiryAlerts, PromoAnalytics
+- Admin analíticas: página separada con análisis profundo
+- Admin inventario: tabla expandible con variantes, filtros, export CSV
+- Admin empleados: tabs Equipo / Horarios / Comentarios con historial filtrable
+- Export CSV: ventas e inventario desde /api/export
+- Deploy en Vercel: https://kioskorosh.vercel.app (CI/CD desde GitHub master)
 
-### En progreso
-- Admin dashboard profesional (ver TAREA ACTUAL)
+### Bugs resueltos (no repetir)
+- API /api/sales/caja POST usaba empleado_id del cliente → ahora usa getUser() server-side
+- VariantPicker tienda usaba precio_extra en lugar de precio_variante
+- Hydration error NavbarTienda: badge del carrito usa useState(mounted) + useEffect
+- Middleware deprecado: renombrado a proxy.ts con export async function proxy()
+- Rol leído del JWT: getRole() y proxy.ts leen de profiles.role en DB
+- RLS bloqueaba middleware: proxy.ts usa service role client para leer profiles
+- MP auto_return en localhost: se omite auto_return cuando APP_URL contiene localhost
+- useSearchParams sin Suspense: páginas de pago envueltas en Suspense
+- webpack React alias solo aplica en Windows (os.platform() === 'win32') para evitar error en Vercel
+- .vercelignore excluye binarios (Antigravity.exe 245MB) para evitar file size limit
 
 ### Pendiente
-- Crear usuarios empleado para pruebas
-- Webhook MP para confirmar ventas en DB
-- Deploy en Vercel
+- Webhook MP para confirmar ventas automáticamente en DB (hoy se confirman manualmente)
+- Usuarios empleado de prueba (crear desde admin panel o SQL)
 
 ## Lo que NO hacer
 - Nunca exponer SUPABASE_SERVICE_ROLE_KEY o MP_ACCESS_TOKEN al cliente
