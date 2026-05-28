@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { RegistroSchema } from '@/lib/validations'
 
 export async function POST(request: NextRequest) {
@@ -37,14 +37,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ data: null, error: error?.message ?? 'Error al crear cuenta' }, { status: 400 })
     }
 
-    // Crear perfil
-    await supabase.from('profiles').insert({
+    // Upsert perfil con service role (el trigger ya lo crea, esto cubre el caso de fallo del trigger)
+    const serviceClient = await createServiceClient()
+    await serviceClient.from('profiles').upsert({
       id: data.user.id,
       role: 'cliente',
       nombre,
       apellido,
       dni,
-    })
+    }, { onConflict: 'id', ignoreDuplicates: false })
 
     return NextResponse.json({ data: { id: data.user.id }, error: null }, { status: 201 })
   } catch {
