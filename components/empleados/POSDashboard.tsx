@@ -1147,7 +1147,7 @@ export function POSDashboard({
       </div>
 
       {/* ── Mobile: FAB cart button ──────────────────────────────────────── */}
-      <div className="fixed bottom-5 right-5 z-30 lg:hidden">
+      <div className="fixed bottom-20 right-5 z-30 lg:hidden">
         <button
           onClick={() => setCartOpen(true)}
           className={`relative flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all active:scale-95 ${
