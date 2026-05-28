@@ -1,0 +1,10 @@
+node_modules/
+.next/
+*.exe
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tsbuildinfo
+.playwright-mcp/
