@@ -77,7 +77,7 @@ export function KPICards({ kpi }: KPICardsProps) {
   ]
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {cards.map((card) => (
         <div
           key={card.label}
@@ -88,7 +88,7 @@ export function KPICards({ kpi }: KPICardsProps) {
           </div>
           <div>
             <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{card.label}</p>
-            <p className="mt-0.5 text-xl font-bold text-gray-900 dark:text-gray-100">{card.value}</p>
+            <p className="mt-0.5 text-lg font-bold text-gray-900 dark:text-gray-100 truncate">{card.value}</p>
           </div>
           {card.delta && <div>{card.delta}</div>}
         </div>

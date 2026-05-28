@@ -9,7 +9,7 @@ export default async function AdminProtectedLayout({ children }: { children: Rea
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
       <NavbarAdmin nombre={profile.nombre} apellido={profile.apellido} />
-      <main className="flex-1 overflow-auto p-6">{children}</main>
+      <main className="flex-1 overflow-auto p-4 pt-16 pb-20 md:p-6 md:pt-6 md:pb-6">{children}</main>
     </div>
   )
 }

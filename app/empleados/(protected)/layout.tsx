@@ -11,7 +11,7 @@ export default async function EmpleadosProtectedLayout({ children }: { children:
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <NavbarEmpleado role={role} nombre={profile?.nombre} apellido={profile?.apellido} />
-      <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pt-16 pb-20 sm:pt-6 sm:pb-6">{children}</main>
     </div>
   )
 }

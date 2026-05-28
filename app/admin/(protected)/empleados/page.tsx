@@ -370,7 +370,7 @@ function EmployeeHistorialModal({ empleado, onClose }: { empleado: EmpleadoStats
 
           {/* KPIs del período */}
           {!loading && (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {[
                 { label: 'Turnos', value: String(sessions.length), color: 'text-gray-900 dark:text-gray-100' },
                 { label: 'Horas trabajadas', value: `${totalHoras.toFixed(1)}h`, color: 'text-indigo-600 dark:text-indigo-400' },

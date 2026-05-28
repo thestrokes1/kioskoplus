@@ -216,16 +216,16 @@ export function InventoryTable({ products, onEdit, onDelete, onNew }: InventoryT
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-1 items-center gap-3">
           <input
             type="search"
             placeholder="Buscar producto..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-64 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500"
+            className="w-full sm:w-64 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:placeholder:text-gray-500"
           />
-          <span className="shrink-0 text-sm text-gray-500 dark:text-gray-400">
+          <span className="hidden sm:inline shrink-0 text-sm text-gray-500 dark:text-gray-400">
             {search
               ? `${filtered.length} de ${localProducts.length} producto${localProducts.length !== 1 ? 's' : ''}`
               : `${localProducts.length} producto${localProducts.length !== 1 ? 's' : ''}`}
