@@ -68,6 +68,19 @@ export interface ProductVariant {
   activo: boolean
 }
 
+/** Devuelve el label descriptivo de una variante: "Nombre — Presentacion Capacidad" */
+export function variantLabel(v: ProductVariant): string {
+  if (v.descripcion_completa) return v.descripcion_completa
+  const parts: string[] = [v.nombre]
+  if (v.presentacion) {
+    const cap = v.capacidad ? `${v.capacidad}${v.capacidad_unidad ?? ''}` : ''
+    parts.push(cap ? `${v.presentacion} ${cap}` : v.presentacion)
+  } else if (v.capacidad) {
+    parts.push(`${v.capacidad}${v.capacidad_unidad ?? ''}`)
+  }
+  return parts.join(' — ')
+}
+
 export interface StockMovement {
   id: string
   product_id: string | null

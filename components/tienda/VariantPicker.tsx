@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { useCartStore } from '@/store/cartStore'
 import { useUiStore } from '@/store/uiStore'
 import type { Product, ProductVariant } from '@/types/index'
+import { variantLabel } from '@/types/index'
 
 interface VariantPickerProps {
   product: Product
@@ -27,7 +28,7 @@ export function VariantPicker({ product, open, onClose }: VariantPickerProps) {
       return
     }
     addItem(product, selected, cantidad)
-    addToast(`${product.emoji} ${product.nombre}${selected ? ` (${selected.nombre})` : ''} agregado`, 'success')
+    addToast(`${product.emoji} ${product.nombre}${selected ? ` (${variantLabel(selected)})` : ''} agregado`, 'success')
     onClose()
     setSelected(null)
     setCantidad(1)
@@ -53,7 +54,7 @@ export function VariantPicker({ product, open, onClose }: VariantPickerProps) {
                       : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
                   }`}
                 >
-                  <span className="block">{v.nombre}</span>
+                  <span className="block">{variantLabel(v)}</span>
                   {v.precio_extra > 0 && (
                     <span className="block text-xs text-gray-500">
                       +${v.precio_extra.toFixed(0)}

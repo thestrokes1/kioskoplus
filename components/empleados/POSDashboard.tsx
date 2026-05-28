@@ -16,7 +16,7 @@ import {
   ScanBarcode,
 } from 'lucide-react'
 import type { Product, ProductVariant, Category, Promo } from '@/types/index'
-import { calcPromo } from '@/types/index'
+import { calcPromo, variantLabel } from '@/types/index'
 import { useBarcodeScanner } from '@/lib/hooks/useBarcodeScanner'
 
 const PROMO_TAB = '__promos__'
@@ -94,10 +94,7 @@ function VariantPicker({
                 className="flex items-center justify-between rounded-xl border border-gray-200 dark:border-gray-600 px-4 py-3 text-left hover:bg-indigo-50 hover:border-indigo-300 dark:hover:bg-indigo-900/30 dark:hover:border-indigo-500 transition-colors"
               >
                 <div>
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{v.nombre}</p>
-                  {v.descripcion_completa && (
-                    <p className="text-xs text-gray-400 dark:text-gray-500">{v.descripcion_completa}</p>
-                  )}
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{variantLabel(v)}</p>
                   <p className="text-xs text-gray-400 dark:text-gray-500">Stock: {v.stock}</p>
                 </div>
                 <p className="text-sm font-semibold text-indigo-700 dark:text-indigo-400">
@@ -163,7 +160,7 @@ function ReceiptModal({ receipt, onClose }: { receipt: Receipt; onClose: () => v
               <div key={i} className="flex justify-between gap-2 text-xs text-gray-700 dark:text-gray-300">
                 <span className="flex-1 truncate">
                   {item.product.emoji} {item.product.nombre}
-                  {item.variant && ` — ${item.variant.nombre}`} x{item.cantidad}
+                  {item.variant && ` — ${variantLabel(item.variant)}`} x{item.cantidad}
                   {item.promo_label && (
                     <span className="block text-[9px] text-indigo-500 dark:text-indigo-400">
                       {item.promo_label}
@@ -370,7 +367,7 @@ function CartContent({
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-xs font-medium text-gray-900 dark:text-gray-100">
                                 {item.product.nombre}
-                                {item.variant && <span className="text-gray-400"> — {item.variant.nombre}</span>}
+                                {item.variant && <span className="text-gray-400"> — {variantLabel(item.variant)}</span>}
                               </p>
                               <div className="flex items-center gap-1">
                                 <span className="text-xs font-semibold text-indigo-600 dark:text-indigo-400">
@@ -414,7 +411,7 @@ function CartContent({
                             {item.product.nombre}
                           </p>
                           {item.variant && (
-                            <p className="truncate text-[10px] text-gray-400 dark:text-gray-500">{item.variant.nombre}</p>
+                            <p className="truncate text-[10px] text-gray-400 dark:text-gray-500">{variantLabel(item.variant)}</p>
                           )}
                           <p className="text-xs text-indigo-600 dark:text-indigo-400">{fmt(item.precio_unitario)} c/u</p>
                         </div>
@@ -581,7 +578,7 @@ function POSPromoCard({
             <div key={i} className="flex items-center gap-2 px-4 py-2">
               <span className="text-base leading-none">{prod.emoji}</span>
               <span className="flex-1 min-w-0 truncate text-xs text-gray-700 dark:text-gray-300">
-                {prod.nombre}{v ? ` — ${v.nombre}` : ''}{pi.cantidad > 1 ? ` ×${pi.cantidad}` : ''}
+                {prod.nombre}{v ? ` — ${variantLabel(v)}` : ''}{pi.cantidad > 1 ? ` ×${pi.cantidad}` : ''}
               </span>
               <span className="text-xs text-gray-400 shrink-0">
                 {fmt((v?.precio_variante ?? prod.precio) * pi.cantidad)}
