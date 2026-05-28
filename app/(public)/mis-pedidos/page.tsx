@@ -93,7 +93,7 @@ export default function MisPedidosPage() {
         <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-12 text-center">
           <Package className="mx-auto mb-3 h-10 w-10 text-gray-300" />
           <p className="text-sm text-gray-500">No tenés pedidos todavía</p>
-          <a href="/" className="mt-3 inline-block text-sm font-medium text-indigo-600 hover:underline">
+          <a href="/tienda" className="mt-3 inline-block text-sm font-medium text-indigo-600 hover:underline">
             Ir a la tienda →
           </a>
         </div>

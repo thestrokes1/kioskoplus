@@ -38,7 +38,7 @@ export function NavbarTienda({ user }: NavbarTiendaProps) {
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-slate-100/90 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/90">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2">
+        <a href="/tienda" className="flex items-center gap-2">
           <span className="text-2xl">🏪</span>
           <span className="text-lg font-bold text-gray-900 dark:text-gray-100">KioskoPlus</span>
         </a>

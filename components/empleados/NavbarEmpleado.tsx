@@ -59,7 +59,7 @@ export function NavbarEmpleado({ role, nombre, apellido }: NavbarEmpleadoProps) 
       <header className="hidden sm:block border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <div className="flex items-center gap-1">
-            <Link href="/" className="mr-3 text-xl font-bold text-gray-900 dark:text-gray-100 hover:opacity-80 transition-opacity">🏪 Kiosko</Link>
+            <Link href="/tienda" className="mr-3 text-xl font-bold text-gray-900 dark:text-gray-100 hover:opacity-80 transition-opacity">🏪 Kiosko</Link>
             {links.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
