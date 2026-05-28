@@ -192,7 +192,6 @@ export function CajaView({ empleadoId, empleadoNombre }: { empleadoId: string; e
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          empleado_id: empleadoId,
           monto_apertura: parseFloat(montoApertura) || 0,
         }),
       })

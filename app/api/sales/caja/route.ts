@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { getRole } from '@/lib/auth'
+import { getRole, getUser } from '@/lib/auth'
 import { CashSessionSchema } from '@/lib/validations'
 
 export async function GET(request: NextRequest) {
@@ -60,13 +60,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ data: null, error: 'Datos inválidos' }, { status: 400 })
     }
 
+    const user = await getUser()
+    if (!user) return NextResponse.json({ data: null, error: 'Sin sesión' }, { status: 401 })
+
     const supabase = await createClient()
-    const empleadoId = (body as Record<string, unknown>).empleado_id as string | undefined
 
     const { data, error } = await supabase
       .from('cash_sessions')
       .insert({
-        empleado_id: empleadoId,
+        empleado_id: user.id,
         monto_apertura: parsed.data.monto_apertura,
         notas: parsed.data.notas,
       })

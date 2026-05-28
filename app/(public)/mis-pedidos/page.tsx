@@ -40,14 +40,18 @@ type SaleWithItems = Sale & {
   }>
 }
 
+const PAGE_SIZE = 20
+
 export default function MisPedidosPage() {
   const router = useRouter()
   const [sales, setSales] = useState<SaleWithItems[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/api/mis-pedidos')
+    fetch(`/api/mis-pedidos?limit=${PAGE_SIZE}&offset=0`)
       .then((r) => {
         if (r.status === 401) { router.push('/login'); return null }
         return r.json()
@@ -55,11 +59,27 @@ export default function MisPedidosPage() {
       .then((json) => {
         if (!json) return
         if (json.error) { setError(json.error); return }
-        setSales(json.data ?? [])
+        const data = json.data ?? []
+        setSales(data)
+        setHasMore(data.length === PAGE_SIZE)
       })
       .catch(() => setError('Error al cargar pedidos'))
       .finally(() => setLoading(false))
   }, [router])
+
+  function cargarMas() {
+    setLoadingMore(true)
+    fetch(`/api/mis-pedidos?limit=${PAGE_SIZE}&offset=${sales.length}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.error) return
+        const data = json.data ?? []
+        setSales((prev) => [...prev, ...data])
+        setHasMore(data.length === PAGE_SIZE)
+      })
+      .catch(() => {})
+      .finally(() => setLoadingMore(false))
+  }
 
   if (loading) {
     return (
@@ -100,6 +120,7 @@ export default function MisPedidosPage() {
       ) : (
         <div className="flex flex-col gap-4">
           {sales.map((sale) => (
+
             <div key={sale.id} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-900">
               <div className="mb-3 flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -148,6 +169,15 @@ export default function MisPedidosPage() {
               </div>
             </div>
           ))}
+          {hasMore && (
+            <button
+              onClick={cargarMas}
+              disabled={loadingMore}
+              className="mt-2 w-full rounded-2xl border border-gray-200 bg-white py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
+            >
+              {loadingMore ? 'Cargando…' : 'Cargar más pedidos'}
+            </button>
+          )}
         </div>
       )}
     </div>

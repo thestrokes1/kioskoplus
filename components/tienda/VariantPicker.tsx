@@ -34,7 +34,7 @@ export function VariantPicker({ product, open, onClose }: VariantPickerProps) {
     setCantidad(1)
   }
 
-  const precioTotal = (product.precio + (selected?.precio_extra ?? 0)) * cantidad
+  const precioTotal = (selected?.precio_variante ?? product.precio) * cantidad
 
   return (
     <Modal open={open} onClose={onClose} title={`${product.emoji} ${product.nombre}`} maxWidth="sm">
@@ -55,11 +55,9 @@ export function VariantPicker({ product, open, onClose }: VariantPickerProps) {
                   }`}
                 >
                   <span className="block">{variantLabel(v)}</span>
-                  {v.precio_extra > 0 && (
-                    <span className="block text-xs text-gray-500">
-                      +${v.precio_extra.toFixed(0)}
-                    </span>
-                  )}
+                  <span className="block text-xs font-semibold text-blue-600 dark:text-blue-400">
+                    {new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v.precio_variante ?? product.precio)}
+                  </span>
                   {v.stock === 0 && <span className="block text-xs text-red-400">Sin stock</span>}
                 </button>
               ))}

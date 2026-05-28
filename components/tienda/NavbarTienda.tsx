@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ShoppingBag, LogOut, LogIn, User } from 'lucide-react'
+import { ShoppingBag, LogOut, LogIn, User, Package } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { useUiStore } from '@/store/uiStore'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
@@ -63,6 +63,13 @@ export function NavbarTienda({ user }: NavbarTiendaProps) {
           {/* Usuario */}
           {user ? (
             <div className="flex items-center gap-2">
+              <a
+                href="/mis-pedidos"
+                className="hidden items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors sm:flex"
+              >
+                <Package className="h-4 w-4" />
+                Mis pedidos
+              </a>
               <span className="hidden items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 sm:flex">
                 <User className="h-4 w-4 text-gray-400" />
                 {user.nombre ?? 'Usuario'}

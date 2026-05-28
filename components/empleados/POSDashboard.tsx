@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Zap,
   ScanBarcode,
+  AlertTriangle,
 } from 'lucide-react'
 import type { Product, ProductVariant, Category, Promo } from '@/types/index'
 import { calcPromo, variantLabel } from '@/types/index'
@@ -273,6 +274,7 @@ function CartContent({
   total,
   vuelto,
   processing,
+  cajaAbierta,
   onConfirm,
   onClose,
 }: {
@@ -286,6 +288,7 @@ function CartContent({
   total: number
   vuelto: number | null
   processing: boolean
+  cajaAbierta: boolean | null
   onConfirm: () => void
   onClose?: () => void
 }) {
@@ -520,8 +523,10 @@ function CartContent({
             onClick={onConfirm}
             disabled={
               processing ||
+              cajaAbierta === false ||
               (metodo === 'efectivo' && (parseFloat(montoRecibido) || 0) < total)
             }
+            title={cajaAbierta === false ? 'Abrí el turno en Caja primero' : undefined}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors active:scale-[0.98]"
           >
             {processing ? (
@@ -529,7 +534,7 @@ function CartContent({
             ) : (
               <CheckCircle className="h-4 w-4" />
             )}
-            {processing ? 'Procesando…' : 'Confirmar venta'}
+            {processing ? 'Procesando…' : cajaAbierta === false ? 'Turno no abierto' : 'Confirmar venta'}
           </button>
 
           <button
@@ -706,6 +711,7 @@ export function POSDashboard({
   const [processing, setProcessing] = useState(false)
   const [receipt, setReceipt] = useState<Receipt | null>(null)
   const [loadingProducts, setLoadingProducts] = useState(true)
+  const [cajaAbierta, setCajaAbierta] = useState<boolean | null>(null)
 
   const searchRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -714,16 +720,18 @@ export function POSDashboard({
   const [scanToast, setScanToast] = useState<{ ok: boolean; msg: string } | null>(null)
   const scanToastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Fetch products + promos on mount
+  // Fetch products + promos + estado de caja al montar
   useEffect(() => {
     Promise.all([
       fetch('/api/products?activo=true').then((r) => r.json()),
       fetch('/api/promos').then((r) => r.json()),
-    ]).then(([prodRes, promoRes]) => {
+      fetch(`/api/sales/caja?abierta=true&empleado_id=${empleadoId}`).then((r) => r.ok ? r.json() : null),
+    ]).then(([prodRes, promoRes, cajaRes]) => {
       setProducts(prodRes.data ?? [])
       setPromos(promoRes.data ?? [])
+      setCajaAbierta(!!cajaRes?.data)
     }).finally(() => setLoadingProducts(false))
-  }, [])
+  }, [empleadoId])
 
   // Focus search on mount
   useEffect(() => {
@@ -914,6 +922,7 @@ export function POSDashboard({
 
   async function confirmarVenta() {
     if (cart.length === 0) return
+    if (!cajaAbierta) { alert('Abrí el turno en Caja antes de registrar ventas.'); return }
     if (metodo === 'efectivo' && (parseFloat(montoRecibido) || 0) < total) return
     setProcessing(true)
     try {
@@ -985,6 +994,7 @@ export function POSDashboard({
     total,
     vuelto,
     processing,
+    cajaAbierta,
     onConfirm: confirmarVenta,
   }
 
@@ -1007,6 +1017,22 @@ export function POSDashboard({
               : <X className="h-4 w-4 shrink-0" />}
             <span>{scanToast.msg}</span>
           </div>
+        </div>
+      )}
+
+      {/* ── Turno cerrado banner ─────────────────────────────────────────── */}
+      {cajaAbierta === false && (
+        <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-3 bg-amber-500 px-4 py-2 text-sm font-medium text-white shadow-md">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <span>No hay turno abierto — las ventas no se podrán confirmar.</span>
+          </div>
+          <a
+            href="/empleados/caja"
+            className="shrink-0 rounded-lg bg-white/20 px-3 py-1 text-xs font-semibold hover:bg-white/30 transition-colors"
+          >
+            Abrir turno →
+          </a>
         </div>
       )}
 
